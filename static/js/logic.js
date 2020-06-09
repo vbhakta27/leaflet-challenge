@@ -83,17 +83,25 @@ function createMap(earthquakes, tectonics) {
     accessToken: API_KEY
   });
 
-  var grayscale = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+  var dark = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
     id: "mapbox.dark",
     accessToken: API_KEY
   });
 
+  var outdoors = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "mapbox.outdoors",
+    accessToken: API_KEY
+  });
+
   // Define a baseMaps object to hold our base layers
   var baseMaps = {
     "Satellite": satellite,
-    "Grayscale": grayscale
+    "Dark": dark,
+    "Outdoors": outdoors
   };
 
   // Create overlay object to hold our overlay layer
@@ -109,7 +117,7 @@ function createMap(earthquakes, tectonics) {
       37.09, -105.71
     ],
     zoom: 3,
-    layers: [satellite, earthquakes, tectonics]
+    layers: [satellite, tectonics, earthquakes]
   });
 
   // Create a layer control
@@ -118,6 +126,20 @@ function createMap(earthquakes, tectonics) {
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
+
+  // Set up the legend  
+  // var legend = L.control({ position: "bottomright" });
+  // legend.onAdd = function () {
+  //   var div = L.DomUtil.create("div", "info legend");
+  //   var limits = [0, 1, 2, 3, 4, 5];
+  //   var colors = ["#B7F34D", "#E1F34D", "#F3DB4D", "#F3BA4D", "#F0A76B", "#F06B6B"];
+  //   for (var i = 0; i < limits.length; i++) {
+  //     div.innerHTML += '<i style="background:' + colors[i] + '"></i> ' +
+  //       limits[i] + (limits[i + 1] ? '&ndash;' + limits[i + 1] + '<br>' : '+');
+  //   }
+  //   return div;
+  // };
+
 
   var legend = L.control({ position: 'bottomright' });
 
@@ -137,5 +159,5 @@ function createMap(earthquakes, tectonics) {
     return div;
   };
 
-  legend.addTo(Mymap);
+  legend.addTo(myMap);
 };
